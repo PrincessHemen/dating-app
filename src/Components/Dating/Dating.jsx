@@ -9,11 +9,11 @@ const Dating = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/data'); // Assuming this endpoint exists on your Express server
+                const response = await fetch('http://localhost:5000/api/data'); // Assuming this endpoint exists on your Express server
                 if (response.ok) {
                     const data = await response.json();
-                    setData(data);
-                    console.log('Data:', data);
+                    setData(data.message);
+                    console.log('Data:', data.message);
                 } else {
                     console.error('Failed to fetch data');
                 }
@@ -39,4 +39,4 @@ const Dating = () => {
     );
 };
 
-export default Datin
+export default Dating;
