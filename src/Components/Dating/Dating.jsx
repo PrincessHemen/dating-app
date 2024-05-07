@@ -1,18 +1,24 @@
 // Dating.jsx
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Dating.css';
-import { connectToMongoDB } from '../../../services/mongoDBService';
 
 const Dating = () => {
+    const [data, setData] = useState(null);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await connectToMongoDB();
-                // Connection successful, you can perform operations with Mongoose
+                const response = await fetch('/api/data'); // Assuming this endpoint exists on your Express server
+                if (response.ok) {
+                    const data = await response.json();
+                    setData(data);
+                    console.log('Data:', data);
+                } else {
+                    console.error('Failed to fetch data');
+                }
             } catch (error) {
-                // Handle connection error
-                console.error("Error connecting to MongoDB:", error);
+                console.error('Error fetching data:', error);
             }
         };
 
@@ -21,9 +27,16 @@ const Dating = () => {
 
     return (
         <div className="dating-container">
-            Dating
+            {data ? (
+                <div>
+                    <h2>Data from server:</h2>
+                    <pre>{JSON.stringify(data, null, 2)}</pre>
+                </div>
+            ) : (
+                <p>Loading...</p>
+            )}
         </div>
     );
 };
 
-export default Dating;
+export default Datin
