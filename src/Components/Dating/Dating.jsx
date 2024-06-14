@@ -10,7 +10,7 @@ const Dating = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const req = await axios.get('/api/data'); // Update the endpoint
+        const req = await axios.get('/api/data'); // Fetch data from the API
         setPeople(req.data);
       } catch (error) {
         console.error("Error fetching data:", error);
