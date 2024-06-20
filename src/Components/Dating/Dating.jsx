@@ -1,11 +1,11 @@
-// components/Dating.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import './Dating.css';
 import axios from '../axios'; // Import the Axios instance
 
-const Dating = () => {
+const Dating = forwardRef((props, ref) => {
   const [people, setPeople] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
@@ -20,20 +20,40 @@ const Dating = () => {
     fetchData();
   }, []);
 
-  const swiped = (direction, nameToDelete) => {
-    console.log("receiving " + nameToDelete);
-  };
-
-  const outOfFrame = (name) => {
-    console.log(name + " left the screen!!");
-  };
+  useImperativeHandle(ref, () => ({
+    handleSwipe: (action) => {
+      switch (action) {
+        case 'repeat':
+          setCurrentIndex((prevIndex) => (prevIndex + 1) % people.length);
+          break;
+        case 'left':
+          console.log(`Skipped: ${people[currentIndex].name}`);
+          setCurrentIndex((prevIndex) => (prevIndex + 1) % people.length);
+          break;
+        case 'star':
+          console.log(`Favorited: ${people[currentIndex].name}`);
+          setCurrentIndex((prevIndex) => (prevIndex + 1) % people.length);
+          break;
+        case 'favorite':
+          console.log(`Matched: ${people[currentIndex].name}`);
+          setCurrentIndex((prevIndex) => (prevIndex + 1) % people.length);
+          break;
+        case 'lightning':
+          console.log(`Super liked: ${people[currentIndex].name}`);
+          setCurrentIndex((prevIndex) => (prevIndex + 1) % people.length);
+          break;
+        default:
+          break;
+      }
+    }
+  }));
 
   return (
     <div className="datingCards">
       <div className="datingCards__container">
-        {people.map((person) => (
+        {people.length > 0 && (
           <motion.div
-            key={person._id} // Use _id from MongoDB as the key
+            key={people[currentIndex]._id} // Use _id from MongoDB as the key
             className="swipe"
             initial={{ x: 0, y: 0 }}
             animate={{ x: 200, y: 0 }}
@@ -41,30 +61,26 @@ const Dating = () => {
             drag="x"
             dragConstraints={{ left: -100, right: 100 }}
             onDragEnd={(event, info) => {
-              if (info.active) {
-                outOfFrame(person.name);
-              } else {
-                if (info.point.x > 100) {
-                  swiped('right', person.name);
-                } else if (info.point.x < -100) {
-                  swiped('left', person.name);
-                }
+              if (info.point.x > 100) {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % people.length);
+              } else if (info.point.x < -100) {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % people.length);
               }
             }}
           >
             <div
-              style={{ backgroundImage: `url(${person.imgUrl})` }}
+              style={{ backgroundImage: `url(${people[currentIndex].imgUrl})` }}
               className="card"
             >
               <div className="cardContent">
-                <h3>{person.name}</h3>
+                <h3>{people[currentIndex].name}</h3>
               </div>
             </div>
           </motion.div>
-        ))}
+        )}
       </div>
     </div>
   );
-};
+});
 
 export default Dating;

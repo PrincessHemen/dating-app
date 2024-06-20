@@ -7,22 +7,22 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import IconButton from '@mui/material/IconButton';
 
-const Swipe = () => {
+const Swipe = ({ onSwipe }) => {
   return (
     <div className="swipeButtons">
-      <IconButton className="swipeButtons__repeat">
+      <IconButton className="swipeButtons__repeat" onClick={() => onSwipe('repeat')}>
         <ReplayIcon fontSize="large" />
       </IconButton>
-      <IconButton className="swipeButtons__left">
+      <IconButton className="swipeButtons__left" onClick={() => onSwipe('left')}>
         <CloseIcon fontSize="large" />
       </IconButton>
-      <IconButton className="swipeButtons__star">
+      <IconButton className="swipeButtons__star" onClick={() => onSwipe('star')}>
         <StarRateIcon fontSize="large" />
       </IconButton>
-      <IconButton className="swipeButtons__right">
+      <IconButton className="swipeButtons__right" onClick={() => onSwipe('favorite')}>
         <FavoriteIcon fontSize="large" />
       </IconButton>
-      <IconButton className="swipeButtons__lightning">
+      <IconButton className="swipeButtons__lightning" onClick={() => onSwipe('lightning')}>
         <FlashOnIcon fontSize="large" />
       </IconButton>
     </div>
